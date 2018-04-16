@@ -16,6 +16,19 @@ var port = process.env.PORT || 3000;
 //   console.log("Connected!");
 // });
 
+app.get("/",function(req,res){
+
+
+
+  var obj = {
+    status : "success",
+    name : "plzchljaa"
+  }
+
+  res.send(JSON.stringify(obj));
+
+});
+
 app.get("/testme",function(req,res){
 
   var n = req.query.name;
