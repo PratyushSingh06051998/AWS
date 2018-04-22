@@ -4,7 +4,7 @@ var mysql = require('mysql');
 
 var port = process.env.PORT || 3000;
 
-var con = mysql.createConnection({
+var con = mysql.createPool({
   host: "my-new-datasabe.ct3gisbrr8uy.ap-south-1.rds.amazonaws.com",
   user: "pratyush_singh",
   password: "password",
@@ -40,16 +40,16 @@ app.get("/testme",function(req,res){
   var sql = "INSERT INTO users SET ?";
 
 
+  con.getConnection(function(err, connection) {
 
-  con.connect(function(err) {
-    if (err){
+    if(err){
       console.log("cannot connect ");
       console.log(err);
     }else{
-      console.log("Connected!");
 
-      con.query(sql,post, function (err, result) {
-        if (err){
+      connection.query(sql,post, function(err, result) {
+
+        if(err){
           var obj = {
             status : "error"
           }
@@ -62,12 +62,43 @@ app.get("/testme",function(req,res){
               status : "success"
             }
             res.send(JSON.stringify(obj));
+
         }
-        con.end();
+
+          connection.release();
       });
 
     }
   });
+
+
+  // con.connect(function(err) {
+  //   if (err){
+  //     console.log("cannot connect ");
+  //     console.log(err);
+  //   }else{
+  //     console.log("Connected!");
+  //
+  //     con.query(sql,post, function (err, result) {
+  //       if (err){
+  //         var obj = {
+  //           status : "error"
+  //         }
+  //         res.send(JSON.stringify(obj));
+  //         console.log(err+" yhaaaa pe hai error");
+  //       }else{
+  //
+  //         console.log("1 record inserted, ID: " + result.insertId);
+  //           var obj = {
+  //             status : "success"
+  //           }
+  //           res.send(JSON.stringify(obj));
+  //       }
+  //       con.end();
+  //     });
+  //
+  //   }
+  // });
 
 
 
