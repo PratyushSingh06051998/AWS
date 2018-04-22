@@ -44,6 +44,7 @@ app.get("/testme",function(req,res){
   con.connect(function(err) {
     if (err){
       console.log("cannot connect ");
+      console.log(err);
     }else{
       console.log("Connected!");
 
